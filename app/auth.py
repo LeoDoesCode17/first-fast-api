@@ -1,5 +1,5 @@
+# app/auth.py
 from typing import Annotated
-
 import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -11,16 +11,9 @@ from app.schemas.token import TokenData
 from app.schemas.user import User, UserInDB
 from sqlalchemy.orm import Session
 from app.database import get_db
+from app.core.security import verify_password, DUMMY_HASH
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-password_hash = PasswordHash.recommended()
-DUMMY_HASH = password_hash.hash("dummypassword")
-
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Return True if plain_password matches the stored hash."""
-    return password_hash.verify(plain_password, hashed_password)
 
 def get_user(db: Session, username: str):
     user = get_by_username(db, username)
@@ -36,7 +29,6 @@ def authenticate_user(db: Session, username: str, password: str) -> UserInDB | N
     if not verify_password(password, user.hashed_password):
         return None
     return user
-
 
 async def get_current_user(db: Annotated[Session, Depends(get_db)], token: Annotated[str, Depends(oauth2_scheme)]) -> User:
     """Decode the JWT, look up the user, and raise 401 on any failure."""

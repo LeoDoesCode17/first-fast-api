@@ -1,3 +1,4 @@
+# app/routes/auth.py
 from typing import Annotated
 from datetime import timedelta
 
@@ -8,7 +9,7 @@ from sqlalchemy.orm import Session
 from app.auth import authenticate_user
 from app.config import ACCESS_TOKEN_EXPIRE_MINUTES, fake_users_db
 from app.schemas.token import Token
-from app.utils import create_access_token
+from app.core.security import create_access_token
 from app.database import get_db
 
 
