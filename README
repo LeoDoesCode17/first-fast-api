@@ -1,0 +1,15 @@
+# Alembic Commands
+## 1. You create/modify a model in tables.py
+## 2. Generate migration
+alembic revision --autogenerate -m "create users table"
+
+## 3. Apply it
+alembic upgrade head
+
+## --- Later, you add a new column to User model ---
+
+## 4. Generate new migration
+alembic revision --autogenerate -m "add phone column to users"
+
+## 5. Apply it
+alembic upgrade head

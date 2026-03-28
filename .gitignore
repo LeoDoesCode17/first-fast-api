@@ -1,0 +1,15 @@
+alembic.ini
+
+# Ignore all __pycache__ folders
+__pycache__/
+
+# Ignore Python compiled files
+*.pyc
+*.pyo
+*.pyd
+
+# Optional: ignore virtual environment
+.venv/
+.env
+
+script.py.mako
