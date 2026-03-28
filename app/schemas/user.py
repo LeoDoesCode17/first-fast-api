@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class User(BaseModel):
     username: str
@@ -9,6 +9,12 @@ class User(BaseModel):
 class UserResponse(User):
     class config:
         from_attributes = True
+
+class PasswordChange(BaseModel):
+    old_password: str
+    new_password: str = Field(..., min_length=8)
+    confirm_password: str
+
 
 class UserInDB(User):
     hashed_password: str

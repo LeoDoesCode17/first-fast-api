@@ -13,3 +13,5 @@ __pycache__/
 .env
 
 script.py.mako
+
+notes.txt
