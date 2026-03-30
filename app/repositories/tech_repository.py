@@ -14,11 +14,12 @@ def create(db: Session, data: TechCreate):
     return tech_instance
 
 def delete(db: Session, id: int):
-    tech_instance = db.query(Tech).filter(Tech.id == id).first()
-    if tech_instance:
-        tech_instance.is_deleted = True
-        db.commit()
-        db.refresh(tech_instance)
+    tech_instance = db.query(Tech).filter(Tech.id == id, Tech.is_deleted == False).first()
+    if not tech_instance:
+        return None
+    tech_instance.is_deleted = True
+    db.commit()
+    db.refresh(tech_instance)
     return tech_instance
 
 def update(db: Session, id: int, data: TechUpdate):
