@@ -25,7 +25,7 @@ async def create_tech(
 ):
     return tech_repository.create(db, data=tech)
 
-@router.patch('/{id}', response_model=TechResponse)
+@router.delete('/{id}', response_model=TechResponse)
 async def soft_delete_tech(
     id: int,
     current_user: Annotated[UserResponse, Depends(get_current_user)],
