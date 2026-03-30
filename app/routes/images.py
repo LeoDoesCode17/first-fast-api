@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from app.auth import get_current_user
 from app.repositories import image_repository
 from app.database import get_db
-from app.schemas.image import ImageResponse, ImageCreate
+from app.schemas.image import ImageResponse, ImageCreate, ImageUpdate
 from sqlalchemy.orm import Session
 
 router = APIRouter(
@@ -43,3 +43,12 @@ async def soft_delete_image(id: int, db: Session = Depends(get_db)):
         )
     return soft_delete_image
 
+@router.patch('/{id}', response_model=ImageResponse)
+async def update_image(id: int, image: ImageUpdate, db: Session = Depends(get_db)):
+    updated_image = image_repository.update(db=db, id=id, data=image)
+    if not updated_image:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Image not found or already deleted'
+        )
+    return updated_image
