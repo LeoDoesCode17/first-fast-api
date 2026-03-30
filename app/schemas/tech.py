@@ -8,3 +8,6 @@ class TechResponse(BaseModel):
     id: int
     name: str
     is_deleted: bool
+
+class TechUpdate(TechCreate):
+    pass
