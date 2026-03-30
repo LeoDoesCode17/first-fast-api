@@ -22,3 +22,14 @@ async def read_all_images(db: Session = Depends(get_db)):
 async def create_image(image: ImageCreate, db: Session = Depends(get_db)):
     image = image_repository.create(db=db, data=image)
     return image
+
+@router.get('/{id}', response_model=ImageResponse)
+async def get_image_by_id(id: int, db: Session = Depends(get_db)):
+    image = image_repository.get_by_id(db=db, id=id)
+    if not image:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Image not found or already deleted'
+        )
+    return image
+
