@@ -31,7 +31,10 @@ async def soft_delete_tech(
     current_user: Annotated[UserResponse, Depends(get_current_user)],
     db: Session = Depends(get_db)
 ):
-    return tech_repository.delete(db, id)
+    soft_delete_tech = tech_repository.delete(db, id)
+    if not soft_delete_tech:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detaul="Tech not found or already deleted")
+    return soft_delete_tech
 
 @router.patch('/{id}', response_model=TechResponse)
 async def update_tech(
