@@ -12,3 +12,9 @@ def create(db: Session, data: ImageCreate):
     db.commit()
     db.refresh(image_instance)
     return image_instance
+
+def get_by_id(db: Session, id: int):
+    image_instance = db.query(Image).filter(Image.id == id, Image.is_deleted == False).first()
+    if not image_instance:
+        return None
+    return image_instance
