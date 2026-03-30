@@ -10,3 +10,6 @@ class ImageResponse(BaseModel):
 class ImageCreate(BaseModel):
     name: str
     url: str
+
+class ImageUpdate(ImageCreate):
+    pass
