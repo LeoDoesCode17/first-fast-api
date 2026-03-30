@@ -24,3 +24,11 @@ async def create_tech(
     db: Session = Depends(get_db)
 ):
     return tech_repository.create(db, data=tech)
+
+@router.patch('/{id}', response_model=TechResponse)
+async def soft_delete_tech(
+    id: int,
+    current_user: Annotated[UserResponse, Depends(get_current_user)],
+    db: Session = Depends(get_db)
+):
+    return tech_repository.delete(db, id)
