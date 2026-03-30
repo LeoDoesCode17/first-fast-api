@@ -12,3 +12,11 @@ def create(db: Session, data: TechCreate):
     db.commit()
     db.refresh(tech_instance)
     return tech_instance
+
+def delete(db: Session, id: int):
+    tech_instance = db.query(Tech).filter(Tech.id == id).first()
+    if tech_instance:
+        tech_instance.is_deleted = True
+        db.commit()
+        db.refresh(tech_instance)
+    return tech_instance
