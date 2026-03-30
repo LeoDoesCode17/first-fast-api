@@ -33,3 +33,13 @@ async def get_image_by_id(id: int, db: Session = Depends(get_db)):
         )
     return image
 
+@router.delete('/{id}', response_model=ImageResponse)
+async def soft_delete_image(id: int, db: Session = Depends(get_db)):
+    soft_delete_image = image_repository.delete(db=db, id=id)
+    if not soft_delete_image:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Image not found or already deleted'
+        )
+    return soft_delete_image
+
