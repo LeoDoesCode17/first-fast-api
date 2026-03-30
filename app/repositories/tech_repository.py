@@ -22,7 +22,7 @@ def delete(db: Session, id: int):
     return tech_instance
 
 def update(db: Session, id: int, data: TechUpdate):
-    tech_instance = db.query(Tech).filter(Tech.id == id).first()
+    tech_instance = db.query(Tech).filter(Tech.id == id, Tech.is_deleted == False).first()
     if not tech_instance:
         return None
     for key, val in data.model_dump().items():
