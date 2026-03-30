@@ -11,3 +11,9 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
     disabled: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
+class Tech(Base):
+    __tablename__ = 'techs'
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
