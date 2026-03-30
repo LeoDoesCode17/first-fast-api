@@ -3,7 +3,7 @@ from app.database import get_db
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from app.auth import get_current_user
-from app.schemas.tech import TechResponse, TechCreate
+from app.schemas.tech import TechResponse, TechCreate, TechUpdate
 from app.schemas.user import UserResponse
 from sqlalchemy.orm import Session
 from app.repositories import tech_repository
@@ -32,3 +32,15 @@ async def soft_delete_tech(
     db: Session = Depends(get_db)
 ):
     return tech_repository.delete(db, id)
+
+@router.patch('/{id}', response_model=TechResponse)
+async def update_tech(
+    id: int,
+    data: TechUpdate,
+    current_user: Annotated[UserResponse, Depends(get_current_user)],
+    db: Session = Depends(get_db)
+):
+    updated_tech = tech_repository.update(db=db, id=id, data=data)
+    if not updated_tech:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tech not found or already deleted")
+    return updated_tech
