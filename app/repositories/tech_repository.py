@@ -2,12 +2,15 @@
 from sqlalchemy.orm import Session
 from app.tables import Tech
 from app.schemas.tech import TechCreate, TechUpdate
+from slugify import slugify
 
 def get(db: Session):
     return db.query(Tech).filter(Tech.is_deleted == False).all()
 
 def create(db: Session, data: TechCreate):
     tech_instance = Tech(**data.model_dump())
+    if not tech_instance.slug:
+        tech_instance.slug = slugify(tech_instance.name)
     db.add(tech_instance)
     db.commit()
     db.refresh(tech_instance)
