@@ -3,7 +3,7 @@ from app.database import get_db
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from app.auth import get_current_user
-from app.schemas.post import PostResponse, PostCreate
+from app.schemas.post import PostResponse, PostCreate, PostUpdate
 from app.schemas.user import UserResponse
 from sqlalchemy.orm import Session
 from app.repositories import post_repository
@@ -28,3 +28,14 @@ async def create_new_post(
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='Slug already exists')
     return created_post
 
+@router.patch('/{id}', response_model=PostResponse)
+async def update_post(
+    id: int,
+    data: PostUpdate,
+    current_user: Annotated[UserResponse, Depends(get_current_user)],
+    db: Session = Depends(get_db)
+): 
+    updated_post = post_repository.update(db=db, id=id, data=data)
+    if not updated_post:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Post doesn't exist or slug already exists")
+    return updated_post
