@@ -17,3 +17,7 @@ class PostCreate(BaseModel):
     title: str
     summary: str
     content: str
+
+class PostUpdate(BaseModel):
+    summary: str | None = None
+    content: str | None = None
