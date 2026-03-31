@@ -53,3 +53,17 @@ async def delete_post(
             detail='Post not found or already deleted'
         )
     return deleted_post
+
+@router.patch('/publish/{id}', response_model=PostResponse)
+async def publish_post(
+    id: int,
+    current_user: Annotated[UserResponse, Depends(get_current_user)],
+    db: Session = Depends(get_db)
+):
+    publish_post = post_repository.publish(db=db, id=id)
+    if not publish_post:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Post not found, already deleted, or already published'
+        )
+    return publish_post
