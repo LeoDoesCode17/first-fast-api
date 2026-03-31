@@ -1,7 +1,7 @@
 # app/repositories/post_repository.py
 from sqlalchemy.orm import Session
 from app.tables import Post
-from app.schemas.post import PostCreate, PostResponse
+from app.schemas.post import PostCreate, PostUpdate
 from slugify import slugify
 
 def get(db: Session):
@@ -18,3 +18,19 @@ def create(db: Session, data: PostCreate):
     db.commit()
     db.refresh(post_instance)
     return post_instance
+
+def update(db: Session, id: int, data: PostUpdate):
+    post_instance = db.query(Post).filter(Post.id == id, Post.is_deleted == False).first()
+
+    # if post with id doesn't exists
+    if not post_instance:
+        return None
+    
+    # update every key and val of post_instance 
+    for key, val in data.model_dump().items():
+        setattr(post_instance, key, val)
+
+    db.commit()
+    db.refresh(post_instance)
+    return post_instance
+    
