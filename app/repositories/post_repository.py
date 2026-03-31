@@ -43,4 +43,13 @@ def delete(db: Session, id: int):
     db.commit()
     db.refresh(post_instance)
     return post_instance
+
+def publish(db: Session, id: int):
+    post_instance = db.query(Post).filter(Post.id == id, Post.is_deleted == False, Post.is_published == False).first()
+    if not post_instance:
+        return None
+    post_instance.is_published = True
+    db.commit()
+    db.refresh(post_instance)
+    return post_instance
     
