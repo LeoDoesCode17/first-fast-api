@@ -16,6 +16,7 @@ class Tech(Base):
     __tablename__ = 'techs'
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
+    slug: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
 class Image(Base):
@@ -23,4 +24,5 @@ class Image(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
     url: Mapped[str] = mapped_column(String, nullable=False)
+    alt_text: Mapped[str]  = mapped_column(String, nullable=False)
     is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)

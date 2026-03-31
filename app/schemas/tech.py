@@ -7,6 +7,7 @@ class TechCreate(BaseModel):
 class TechResponse(BaseModel):
     id: int
     name: str
+    slug: str
     is_deleted: bool
 
 class TechUpdate(TechCreate):
